@@ -9,7 +9,8 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-insecure-key-change-in-production")
-DEBUG = os.getenv("DEBUG", "True").lower() == "true"
+_default_debug = "false" if os.getenv("RENDER", "").lower() == "true" else "true"
+DEBUG = os.getenv("DEBUG", _default_debug).lower() == "true"
 ALLOWED_HOSTS = [
     h.strip()
     for h in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
@@ -103,9 +104,9 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB", "BlackPater"),
-            "USER": os.getenv("POSTGRES_USER", "BlackPater"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "BlackPater_secret"),
+            "NAME": os.getenv("POSTGRES_DB", "blackpater"),
+            "USER": os.getenv("POSTGRES_USER", "blackpater"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "blackpater_secret"),
             "HOST": os.getenv("POSTGRES_HOST", "localhost"),
             "PORT": os.getenv("POSTGRES_PORT", "5432"),
         }

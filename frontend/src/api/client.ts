@@ -33,7 +33,7 @@ async function readResponseBody(res: Response): Promise<unknown> {
     return {
       detail: res.ok
         ? "Réponse serveur invalide (JSON attendu)."
-        : `Erreur ${res.status} — vérifiez que l'API est en ligne et DATABASE_URL configurée sur Render.`,
+        : `Erreur ${res.status} — le serveur a renvoyé une page HTML (souvent base non migrée ou DEBUG=true sur Render).`,
     };
   }
 }

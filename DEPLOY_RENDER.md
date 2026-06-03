@@ -206,6 +206,8 @@ Web Service **`patermessager`** → **Environment** :
 
 Supprimez `DATABASE_URL` si elle existe. Puis **Manual Deploy** → **Clear build cache & deploy**.
 
+> `start.sh` lance `migrate` à chaque démarrage (obligatoire : `db.sqlite3` est gitignoré et n’est pas embarqué dans le déploiement Render).
+
 ### Correction avec PostgreSQL
 
 1. **New → PostgreSQL** (plan Free).
