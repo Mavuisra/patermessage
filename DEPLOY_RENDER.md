@@ -162,6 +162,14 @@ gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
 
 Le module Django s’appelle **`config.wsgi`**, pas `your_application.wsgi`.
 
+**Start Command obligatoire** (ou `Procfile` qui appelle `bash start.sh`) :
+
+```
+chmod +x start.sh && ./start.sh
+```
+
+Sans ça, les migrations SQLite ne tournent pas → erreur `no such table: core_user`.
+
 ### 3. Frontend Static
 
 - New → Static Site → **Root Directory** : `frontend`

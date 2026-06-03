@@ -9,8 +9,11 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-insecure-key-change-in-production")
-_default_debug = "false" if os.getenv("RENDER", "").lower() == "true" else "true"
-DEBUG = os.getenv("DEBUG", _default_debug).lower() == "true"
+_on_render = os.getenv("RENDER", "").lower() == "true"
+if _on_render:
+    DEBUG = False
+else:
+    DEBUG = os.getenv("DEBUG", "true").lower() == "true"
 ALLOWED_HOSTS = [
     h.strip()
     for h in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
@@ -80,10 +83,12 @@ else:
     )
 
 if USE_SQLITE:
+    _sqlite_dir = BASE_DIR / "data"
+    _sqlite_dir.mkdir(parents=True, exist_ok=True)
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "NAME": _sqlite_dir / "db.sqlite3",
         }
     }
 elif os.getenv("DATABASE_URL"):
