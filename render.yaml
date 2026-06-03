@@ -7,7 +7,7 @@ databases:
     user: blackpanther
 
 services:
-  # API Django
+  # BACKEND — Web Service Python (dossier backend/)
   - type: web
     name: blackpanther-api
     runtime: python
@@ -42,7 +42,7 @@ services:
       - key: ALLOWED_HOSTS
         sync: false
 
-  # Frontend React (site statique)
+  # FRONTEND — Static Site (dossier frontend/)
   - type: web
     name: blackpanther-web
     runtime: static
