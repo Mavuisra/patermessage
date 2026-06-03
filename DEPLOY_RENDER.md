@@ -58,7 +58,7 @@ Si vous créez **un par un** sans Blueprint :
 4. Build : `npm install && npm run build`
 5. Publish directory : `dist`
 6. **Redirects/Rewrites** : `/*` → `/index.html` (SPA React)
-7. Variable : `VITE_API_URL` = `https://VOTRE-API.onrender.com/api`
+7. Variable : `VITE_API_URL` = `https://patermessager.onrender.com/api`
 
 ### Erreur fréquente
 
@@ -91,14 +91,14 @@ Si vous créez **un par un** sans Blueprint :
 | Variable | Exemple |
 |----------|---------|
 | `DJANGO_SUPERUSER_PASSWORD` | mot de passe propriétaire fort |
-| `CORS_ALLOWED_ORIGINS` | `https://blackpanther-web.onrender.com` |
-| `ALLOWED_HOSTS` | `blackpanther-api.onrender.com` |
+| `CORS_ALLOWED_ORIGINS` | `https://VOTRE-SITE-FRONT.onrender.com` |
+| `ALLOWED_HOSTS` | `patermessager.onrender.com` |
 
 ### `blackpanther-web`
 
 | Variable | Exemple |
 |----------|---------|
-| `VITE_API_URL` | `https://blackpanther-api.onrender.com/api` |
+| `VITE_API_URL` | `https://patermessager.onrender.com/api` |
 
 6. Attendez le premier déploiement (5–10 min).
 7. Ouvrez l’URL du site statique (`blackpanther-web`).
@@ -157,7 +157,7 @@ Le module Django s’appelle **`config.wsgi`**, pas `your_application.wsgi`.
 ## Vérifier que l’API fonctionne
 
 ```
-https://blackpanther-api.onrender.com/api/health/
+https://patermessager.onrender.com/api/health/
 ```
 
 Réponse attendue : `{"status":"ok"}`
@@ -168,6 +168,6 @@ Ajoutez sur l’API :
 
 - `STRIPE_SECRET_KEY`
 - `STRIPE_PUBLISHABLE_KEY`
-- `STRIPE_WEBHOOK_SECRET` (webhook URL : `https://blackpanther-api.onrender.com/api/payments/webhook/stripe/`)
+- `STRIPE_WEBHOOK_SECRET` (webhook URL : `https://patermessager.onrender.com/api/payments/webhook/stripe/`)
 
 Sans Stripe, le mode **mock** de paiement reste actif en dev ; en prod configurez les clés ou adaptez le flux mock.
