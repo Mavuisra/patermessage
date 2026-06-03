@@ -118,25 +118,21 @@ Si vous créez **un par un** sans Blueprint :
 
 ## Déploiement manuel (sans Blueprint)
 
-### 1. Base de données (au choix)
+### 1. Base de données — PostgreSQL (obligatoire en ligne)
 
-**Option A — SQLite (simple, sans PostgreSQL)**
+> **Pourquoi pas SQLite sur Render ?**  
+> À chaque `git push` / redeploy, le disque du serveur est recréé.  
+> `db.sqlite3` est gitignoré → **tous les comptes et messages disparaissent**.
 
-Sur le Web Service API, ajoutez :
+**Étapes (gratuit, une seule fois) :**
 
-| Variable | Valeur |
-|----------|--------|
-| `USE_SQLITE` | `true` |
-| `RENDER` | `true` |
-| `DEBUG` | `false` |
+1. Render → **New** → **PostgreSQL** → plan **Free** → créez la base (ex. `patermessage-db`).
+2. Web Service **`patermessager`** → **Environment** :
+   - **Link Database** → choisissez votre PostgreSQL → Render ajoute **`DATABASE_URL`**
+   - **Supprimez** `USE_SQLITE` si elle existe
+3. **Manual Deploy** → les migrations créent les tables dans PostgreSQL (données **conservées** après les prochains push).
 
-Ne mettez **pas** `DATABASE_URL`. Au build, `migrate` crée `backend/db.sqlite3`.
-
-> ⚠️ Sur Render gratuit, le disque est **éphémère** : comptes et messages peuvent disparaître après un redéploiement. Pour des données permanentes, utilisez PostgreSQL (option B).
-
-**Option B — PostgreSQL (recommandé en prod)**
-
-New → PostgreSQL → Free → copiez **Internal Database URL** → variable `DATABASE_URL` sur l’API.
+**SQLite** : réservé au **développement local** (`USE_SQLITE=true` dans `.env`).
 
 ### 2. API Web
 
@@ -145,7 +141,7 @@ New → PostgreSQL → Free → copiez **Internal Database URL** → variable `D
 - **Build Command** : `chmod +x build.sh start.sh && ./build.sh`
 - **Start Command** : `chmod +x start.sh && ./start.sh`  
   *(ou laisser vide si Render lit `backend/Procfile` — **ne pas** laisser `gunicorn your_application.wsgi`)*
-- Variables : `SECRET_KEY`, `DEBUG=false`, `RENDER=true`, `USE_SQLITE=true` (ou `DATABASE_URL` si PostgreSQL), etc.
+- Variables : `DATABASE_URL`, `SECRET_KEY`, `DEBUG=false`, `RENDER=true`, etc.
 
 #### Erreur `No module named 'your_application'`
 
@@ -197,11 +193,31 @@ Ajoutez sur l’API :
 
 Sans Stripe, le mode **mock** de paiement reste actif en dev ; en prod configurez les clés ou adaptez le flux mock.
 
+## Données effacées à chaque push ?
+
+**Cause :** SQLite sur Render (sans PostgreSQL).
+
+**Correction :**
+
+1. Créez une base **PostgreSQL** (Free) sur Render.
+2. Liez **`DATABASE_URL`** au Web Service API.
+3. Supprimez **`USE_SQLITE`**.
+4. Redéployez — les messages et comptes resteront après les prochains push.
+
+---
+
 ## Erreur inscription : « Unexpected end of JSON input »
 
 Cause : l’API ne peut pas écrire en base (souvent PostgreSQL sur `localhost` sans `DATABASE_URL`).
 
-### Correction avec SQLite (votre cas)
+### Correction avec PostgreSQL (recommandé — données permanentes)
+
+1. **New → PostgreSQL** (plan Free).
+2. Web Service → **Link Database** ou **`DATABASE_URL`** = Internal Database URL.
+3. Supprimez `USE_SQLITE`.
+4. Redéployez.
+
+### Correction avec SQLite (local uniquement)
 
 Web Service **`patermessager`** → **Environment** :
 

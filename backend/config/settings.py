@@ -74,21 +74,21 @@ TEMPLATES = [
 ]
 
 USE_SQLITE = os.getenv("USE_SQLITE")
-if USE_SQLITE is not None:
+if os.getenv("DATABASE_URL"):
+    USE_SQLITE = False
+elif USE_SQLITE is not None:
     USE_SQLITE = USE_SQLITE.lower() == "true"
 else:
-    # Render sans PostgreSQL lié → SQLite par défaut
-    USE_SQLITE = (
-        os.getenv("RENDER", "").lower() == "true" and not os.getenv("DATABASE_URL")
-    )
+    # Local sans DATABASE_URL → SQLite ; Render → PostgreSQL obligatoire
+    USE_SQLITE = os.getenv("RENDER", "").lower() != "true"
 
 if USE_SQLITE:
-    _sqlite_dir = BASE_DIR / "data"
-    _sqlite_dir.mkdir(parents=True, exist_ok=True)
+    _sqlite_root = Path(os.getenv("SQLITE_DATA_DIR", str(BASE_DIR / "data")))
+    _sqlite_root.mkdir(parents=True, exist_ok=True)
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": _sqlite_dir / "db.sqlite3",
+            "NAME": _sqlite_root / "db.sqlite3",
         }
     }
 elif os.getenv("DATABASE_URL"):
