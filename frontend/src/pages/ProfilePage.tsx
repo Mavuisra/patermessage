@@ -33,11 +33,11 @@ export function ProfilePage() {
       <StatusBar />
       <h1 className="wa-screen__title">Profil</h1>
       <div className="wa-page-pad">
-        {isAuthenticated && (
+        {isAuthenticated ? (
           <div className="wa-card wa-card--center wa-profile-owner">
             <img src={logo} alt="" className="wa-profile-logo" />
             <strong>{user?.display_name || "Black Pater"}</strong>
-            <p className="wa-profile-role">Compte propriétaire</p>
+            <p className="wa-profile-role">Compte propriétaire · {user?.username}</p>
             <Link
               to="/messages"
               className="wa-btn-outline wa-profile-owner__link"
@@ -48,54 +48,54 @@ export function ProfilePage() {
               Déconnexion propriétaire
             </button>
           </div>
-        )}
+        ) : (
+          <div className="wa-card wa-visitor-connect">
+            <div className="wa-visitor-connect__head wa-card--center">
+              <img src={logo} alt="" className="wa-profile-logo" />
+              {connected ? (
+                <>
+                  <strong>{visitor.name}</strong>
+                  <p className="wa-profile-role">{visitor.email}</p>
+                </>
+              ) : (
+                <p className="wa-profile-role">Accès visiteur</p>
+              )}
+            </div>
 
-        <div className="wa-card wa-visitor-connect">
-          <div className="wa-visitor-connect__head wa-card--center">
-            <img src={logo} alt="" className="wa-profile-logo" />
             {connected ? (
               <>
-                <strong>{visitor.name}</strong>
-                <p className="wa-profile-role">{visitor.email}</p>
+                <VisitorProfileEditForm
+                  key={visitorKey}
+                  onSaved={() => navigate("/chat")}
+                />
+                <Link
+                  to="/chat"
+                  className="wa-btn-outline wa-profile-owner__link"
+                  style={{ marginTop: "0.5rem" }}
+                >
+                  Ouvrir le chat
+                </Link>
+                <button
+                  type="button"
+                  className="wa-btn-outline wa-profile-logout"
+                  onClick={handleVisitorLogout}
+                >
+                  Se déconnecter
+                </button>
               </>
             ) : (
-              <p className="wa-profile-role">Accès visiteur</p>
+              <VisitorProfileForm
+                key={`${visitorKey}-${authMode}`}
+                mode={authMode}
+                onModeChange={setAuthMode}
+                onSaved={() => {
+                  setConnected(true);
+                  navigate("/chat");
+                }}
+              />
             )}
           </div>
-
-          {connected ? (
-            <>
-              <VisitorProfileEditForm
-                key={visitorKey}
-                onSaved={() => navigate("/chat")}
-              />
-              <Link
-                to="/chat"
-                className="wa-btn-outline wa-profile-owner__link"
-                style={{ marginTop: "0.5rem" }}
-              >
-                Ouvrir le chat
-              </Link>
-              <button
-                type="button"
-                className="wa-btn-outline wa-profile-logout"
-                onClick={handleVisitorLogout}
-              >
-                Se déconnecter
-              </button>
-            </>
-          ) : (
-            <VisitorProfileForm
-              key={`${visitorKey}-${authMode}`}
-              mode={authMode}
-              onModeChange={setAuthMode}
-              onSaved={() => {
-                setConnected(true);
-                navigate("/chat");
-              }}
-            />
-          )}
-        </div>
+        )}
       </div>
       <BottomNav />
     </div>
