@@ -90,7 +90,8 @@ Si vous créez **un par un** sans Blueprint :
 
 | Variable | Exemple |
 |----------|---------|
-| `DJANGO_SUPERUSER_PASSWORD` | mot de passe propriétaire fort |
+| `DJANGO_SUPERUSER_USERNAME` | `admin` |
+| `DJANGO_SUPERUSER_PASSWORD` | `Admin@2026` |
 | `CORS_ALLOWED_ORIGINS` | `https://VOTRE-SITE-FRONT.onrender.com` |
 | `ALLOWED_HOSTS` | `patermessager.onrender.com` |
 
@@ -106,8 +107,8 @@ Si vous créez **un par un** sans Blueprint :
 ## Connexion propriétaire
 
 - URL : `https://VOTRE-SITE.onrender.com/adminpater`
-- Utilisateur : `BlackPater`
-- Mot de passe : celui défini dans `DJANGO_SUPERUSER_PASSWORD`
+- Utilisateur : `admin`
+- Mot de passe : `Admin@2026` (ou valeur de `DJANGO_SUPERUSER_PASSWORD` sur Render)
 
 ## Limites du plan gratuit Render
 
@@ -209,7 +210,8 @@ Web Service **`patermessager`** → **Environment** :
 | `USE_SQLITE` | `true` |
 | `RENDER` | `true` |
 | `DEBUG` | `false` |
-| `DJANGO_SUPERUSER_PASSWORD` | mot de passe fort |
+| `DJANGO_SUPERUSER_USERNAME` | `admin` |
+| `DJANGO_SUPERUSER_PASSWORD` | `Admin@2026` |
 | `CORS_ALLOWED_ORIGINS` | URL de votre site static |
 
 Supprimez `DATABASE_URL` si elle existe. Puis **Manual Deploy** → **Clear build cache & deploy**.

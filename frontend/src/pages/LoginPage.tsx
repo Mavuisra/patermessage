@@ -50,7 +50,7 @@ export function LoginPage({ adminMode = false }: { adminMode?: boolean }) {
           </span>
           <input
             type="text"
-            placeholder="Nom d'utilisateur (ex. BlackPater)"
+            placeholder="Nom d'utilisateur (ex. admin)"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoComplete="username"

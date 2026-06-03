@@ -50,7 +50,7 @@ npm run dev
 ```
 
 - **Page publique** : http://localhost:5173  
-- **Espace propriétaire** : http://localhost:5173/adminpater → identifiants `BlackPater` / mot de passe défini  
+- **Espace propriétaire** : http://localhost:5173/adminpater → identifiants `admin` / `Admin@2026`  
 - **API docs** : http://localhost:8000/api/docs/
 
 ## Variables d'environnement

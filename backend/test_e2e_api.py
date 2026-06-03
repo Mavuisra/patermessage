@@ -39,7 +39,7 @@ ok("Profil display_name", profile.get("display_name") == "Black Pater")
 code, login = req(
     f"{BASE}/auth/login/",
     "POST",
-    {"username": "BlackPater", "password": "changeme"},
+    {"username": "admin", "password": "Admin@2026"},
 )
 ok("Login owner", code == 200 and "access" in login)
 token = login.get("access", "")

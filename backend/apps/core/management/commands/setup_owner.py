@@ -10,9 +10,9 @@ class Command(BaseCommand):
     help = "Crée le compte Black Pater et les paramètres plateforme"
 
     def add_arguments(self, parser):
-        parser.add_argument("--username", default="blackpater")
-        parser.add_argument("--password", default="changeme")
-        parser.add_argument("--email", default="owner@blackpater.app")
+        parser.add_argument("--username", default="admin")
+        parser.add_argument("--password", default="Admin@2026")
+        parser.add_argument("--email", default="admin@blackpater.app")
 
     def handle(self, *args, **options):
         import os
