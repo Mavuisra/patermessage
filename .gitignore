@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+*.sqlite3
+backend/db.sqlite3
+backend/staticfiles/
+backend/media/
+backend/.env
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.pem
+firebase-credentials.json
+serviceAccountKey.json
+
+# PWA build
+*.local
