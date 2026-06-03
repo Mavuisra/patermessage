@@ -123,11 +123,28 @@ New → PostgreSQL → Free → copiez **Internal Database URL**.
 
 ### 2. API Web
 
-- New → Web Service → repo → **Root Directory** : `backend`
-- Runtime : Python 3.12
-- Build : `./build.sh`
-- Start : `./start.sh`
+- New → **Web Service** (pas Static Site) → repo → **Root Directory** : `backend`
+- Runtime : **Python 3.12** (variable `PYTHON_VERSION` = `3.12.7`)
+- **Build Command** : `chmod +x build.sh start.sh && ./build.sh`
+- **Start Command** : `chmod +x start.sh && ./start.sh`  
+  *(ou laisser vide si Render lit `backend/Procfile` — **ne pas** laisser `gunicorn your_application.wsgi`)*
 - Variables : `DATABASE_URL`, `SECRET_KEY`, `DEBUG=false`, `RENDER=true`, etc.
+
+#### Erreur `No module named 'your_application'`
+
+Render utilise la commande **par défaut** du template Python. Corrigez dans **Settings → Start Command** :
+
+```
+chmod +x start.sh && ./start.sh
+```
+
+Ou directement :
+
+```
+gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+```
+
+Le module Django s’appelle **`config.wsgi`**, pas `your_application.wsgi`.
 
 ### 3. Frontend Static
 
