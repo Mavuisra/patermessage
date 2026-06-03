@@ -9,13 +9,6 @@ import { hasVisitor } from "../lib/visitor";
 import { ownerApi, type InboundMessage, type OwnerMessageFilters } from "../api/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString("fr-FR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("fr-FR", {
     day: "numeric",

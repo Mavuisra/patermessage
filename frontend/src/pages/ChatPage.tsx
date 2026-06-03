@@ -1,20 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import {
-  formatPrice,
-  publicApi,
-  submitMessageMultipart,
-  type PlatformProfile,
-} from "../api/client";
+import { publicApi, submitMessageMultipart } from "../api/client";
 import { useVoiceRecorder } from "../hooks/useVoiceRecorder";
-import { stashVoiceBlob } from "../lib/voicePending";
 import logo from "../assets/logo.png";
 import { Icon } from "../components/icons/Icon";
 import { VoiceMessageBubble } from "../components/wa/VoiceMessageBubble";
 import { StatusBar } from "../components/wa/StatusBar";
 import { hasVoiceAccess } from "../lib/voiceAccess";
-import { SUBSCRIPTION_LABEL, SUBSCRIPTION_USD } from "../lib/pricing";
+import { SUBSCRIPTION_LABEL } from "../lib/pricing";
 import { refreshSubscription } from "../lib/subscription";
 import { hasVisitor } from "../lib/visitor";
 import { fetchVisitorThread } from "../lib/visitorThread";
@@ -36,7 +30,6 @@ type Sheet = null | "priority1" | "priority2" | "identity" | "voicePay";
 export function ChatPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const [profile, setProfile] = useState<PlatformProfile | null>(null);
   const [text, setText] = useState("");
   const [messages, setMessages] = useState<LocalMsg[]>([]);
   const [sheet, setSheet] = useState<Sheet>(null);
@@ -62,7 +55,6 @@ export function ChatPage() {
   }, []);
 
   useEffect(() => {
-    publicApi.getProfile().then(setProfile).catch(console.error);
     if (hasVisitor()) refreshSubscription().catch(console.error);
   }, []);
 
@@ -85,9 +77,6 @@ export function ChatPage() {
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, sheet, systemBanner, voice.recording, voicePreview]);
-
-  const timeNow = () =>
-    new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 
   const removeDraftVoice = useCallback(() => {
     if (draftVoiceIdRef.current) {
@@ -115,7 +104,6 @@ export function ChatPage() {
     }
     setLoading(true);
     const blob = voicePreview.blob;
-    const durationSec = voicePreview.duration;
     setVoicePreview(null);
     try {
       const payload = {
@@ -233,12 +221,6 @@ export function ChatPage() {
     void voice.start();
   };
 
-  const price = profile
-    ? formatPrice(
-        profile.premium_message_price.cents,
-        profile.premium_message_price.currency || "USD"
-      )
-    : SUBSCRIPTION_USD;
   const recActive = voice.recording || !!voicePreview;
   const recSeconds = voicePreview?.duration ?? voice.seconds;
   const hasText = !!text.trim();

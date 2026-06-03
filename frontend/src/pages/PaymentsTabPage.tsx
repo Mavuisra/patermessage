@@ -20,7 +20,6 @@ export function PaymentsTabPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [sub, setSub] = useState<SubscriptionStatus | null>(null);
   const [loading, setLoading] = useState(true);
-  const visitor = getVisitor();
 
   const load = useCallback(async () => {
     setLoading(true);

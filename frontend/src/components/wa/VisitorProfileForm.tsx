@@ -49,7 +49,7 @@ export function VisitorProfileForm({
     </label>
   );
 
-  const run = async (fn: () => Promise<void>) => {
+  const run = async (fn: () => Promise<unknown>) => {
     setLoading(true);
     setError("");
     try {
