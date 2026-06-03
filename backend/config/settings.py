@@ -69,13 +69,34 @@ TEMPLATES = [
     },
 ]
 
-USE_SQLITE = os.getenv("USE_SQLITE", "false").lower() == "true"
+USE_SQLITE = os.getenv("USE_SQLITE")
+if USE_SQLITE is not None:
+    USE_SQLITE = USE_SQLITE.lower() == "true"
+else:
+    # Render sans PostgreSQL lié → SQLite par défaut
+    USE_SQLITE = (
+        os.getenv("RENDER", "").lower() == "true" and not os.getenv("DATABASE_URL")
+    )
 
 if USE_SQLITE:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+elif os.getenv("DATABASE_URL"):
+    import urllib.parse as urlparse
+
+    url = urlparse.urlparse(os.environ["DATABASE_URL"])
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": url.path[1:],
+            "USER": url.username,
+            "PASSWORD": url.password,
+            "HOST": url.hostname,
+            "PORT": url.port or "5432",
         }
     }
 else:
@@ -88,19 +109,6 @@ else:
             "HOST": os.getenv("POSTGRES_HOST", "localhost"),
             "PORT": os.getenv("POSTGRES_PORT", "5432"),
         }
-    }
-
-if os.getenv("DATABASE_URL"):
-    import urllib.parse as urlparse
-
-    url = urlparse.urlparse(os.environ["DATABASE_URL"])
-    DATABASES["default"] = {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": url.path[1:],
-        "USER": url.username,
-        "PASSWORD": url.password,
-        "HOST": url.hostname,
-        "PORT": url.port or "5432",
     }
 
 AUTH_PASSWORD_VALIDATORS = [

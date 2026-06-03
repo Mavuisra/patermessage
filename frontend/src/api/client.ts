@@ -10,7 +10,7 @@ function getVisitorToken(): string | null {
   return localStorage.getItem("bp_visitor_access");
 }
 
-function formatApiError(err: Record<string, unknown>): string {
+function formatApiError(err: Record<string, unknown>, fallback: string): string {
   if (typeof err.detail === "string") return err.detail;
   if (Array.isArray(err.detail)) return err.detail.map(String).join(", ");
   const parts: string[] = [];
@@ -19,7 +19,23 @@ function formatApiError(err: Record<string, unknown>): string {
     if (Array.isArray(val)) parts.push(...val.map(String));
     else if (typeof val === "string") parts.push(val);
   }
-  return parts.join(" ") || "Erreur réseau";
+  return parts.join(" ") || fallback;
+}
+
+async function readResponseBody(res: Response): Promise<unknown> {
+  const text = await res.text();
+  if (!text.trim()) {
+    return { detail: res.statusText || "Réponse vide du serveur" };
+  }
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    return {
+      detail: res.ok
+        ? "Réponse serveur invalide (JSON attendu)."
+        : `Erreur ${res.status} — vérifiez que l'API est en ligne et DATABASE_URL configurée sur Render.`,
+    };
+  }
 }
 
 export async function api<T>(
@@ -39,18 +55,31 @@ export async function api<T>(
     if (token) headers.Authorization = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers,
+    });
+  } catch {
+    throw new Error(
+      "Impossible de joindre l'API. Vérifiez votre connexion ou que le backend Render est actif."
+    );
+  }
+
+  const body = await readResponseBody(res);
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(formatApiError(err as Record<string, unknown>));
+    throw new Error(
+      formatApiError(
+        (body && typeof body === "object" ? body : {}) as Record<string, unknown>,
+        res.statusText || "Erreur réseau"
+      )
+    );
   }
 
   if (res.status === 204) return undefined as T;
-  return res.json();
+  return body as T;
 }
 
 export async function submitMessageMultipart(
@@ -74,17 +103,17 @@ export async function submitMessageMultipart(
     body: form,
   });
 
+  const body = await readResponseBody(res);
+
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: res.statusText }));
     throw new Error(
-      typeof err.detail === "string"
-        ? err.detail
-        : Array.isArray(err.detail)
-          ? err.detail.join(", ")
-          : "Erreur réseau"
+      formatApiError(
+        (body && typeof body === "object" ? body : {}) as Record<string, unknown>,
+        res.statusText || "Erreur réseau"
+      )
     );
   }
-  return res.json();
+  return body as MessageSubmitResponse;
 }
 
 export interface ThreadItem {

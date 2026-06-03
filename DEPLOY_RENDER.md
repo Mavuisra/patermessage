@@ -117,9 +117,25 @@ Si vous créez **un par un** sans Blueprint :
 
 ## Déploiement manuel (sans Blueprint)
 
-### 1. Base PostgreSQL
+### 1. Base de données (au choix)
 
-New → PostgreSQL → Free → copiez **Internal Database URL**.
+**Option A — SQLite (simple, sans PostgreSQL)**
+
+Sur le Web Service API, ajoutez :
+
+| Variable | Valeur |
+|----------|--------|
+| `USE_SQLITE` | `true` |
+| `RENDER` | `true` |
+| `DEBUG` | `false` |
+
+Ne mettez **pas** `DATABASE_URL`. Au build, `migrate` crée `backend/db.sqlite3`.
+
+> ⚠️ Sur Render gratuit, le disque est **éphémère** : comptes et messages peuvent disparaître après un redéploiement. Pour des données permanentes, utilisez PostgreSQL (option B).
+
+**Option B — PostgreSQL (recommandé en prod)**
+
+New → PostgreSQL → Free → copiez **Internal Database URL** → variable `DATABASE_URL` sur l’API.
 
 ### 2. API Web
 
@@ -128,7 +144,7 @@ New → PostgreSQL → Free → copiez **Internal Database URL**.
 - **Build Command** : `chmod +x build.sh start.sh && ./build.sh`
 - **Start Command** : `chmod +x start.sh && ./start.sh`  
   *(ou laisser vide si Render lit `backend/Procfile` — **ne pas** laisser `gunicorn your_application.wsgi`)*
-- Variables : `DATABASE_URL`, `SECRET_KEY`, `DEBUG=false`, `RENDER=true`, etc.
+- Variables : `SECRET_KEY`, `DEBUG=false`, `RENDER=true`, `USE_SQLITE=true` (ou `DATABASE_URL` si PostgreSQL), etc.
 
 #### Erreur `No module named 'your_application'`
 
@@ -171,3 +187,28 @@ Ajoutez sur l’API :
 - `STRIPE_WEBHOOK_SECRET` (webhook URL : `https://patermessager.onrender.com/api/payments/webhook/stripe/`)
 
 Sans Stripe, le mode **mock** de paiement reste actif en dev ; en prod configurez les clés ou adaptez le flux mock.
+
+## Erreur inscription : « Unexpected end of JSON input »
+
+Cause : l’API ne peut pas écrire en base (souvent PostgreSQL sur `localhost` sans `DATABASE_URL`).
+
+### Correction avec SQLite (votre cas)
+
+Web Service **`patermessager`** → **Environment** :
+
+| Variable | Valeur |
+|----------|--------|
+| `USE_SQLITE` | `true` |
+| `RENDER` | `true` |
+| `DEBUG` | `false` |
+| `DJANGO_SUPERUSER_PASSWORD` | mot de passe fort |
+| `CORS_ALLOWED_ORIGINS` | URL de votre site static |
+
+Supprimez `DATABASE_URL` si elle existe. Puis **Manual Deploy** → **Clear build cache & deploy**.
+
+### Correction avec PostgreSQL
+
+1. **New → PostgreSQL** (plan Free).
+2. **`DATABASE_URL`** = Internal Database URL (ou « Link Database »).
+3. Retirez `USE_SQLITE` ou mettez `false`.
+4. Redéployez.
