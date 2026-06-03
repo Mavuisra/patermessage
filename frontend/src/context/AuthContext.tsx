@@ -11,22 +11,39 @@ import { ownerApi, type LoginResponse } from "../api/client";
 interface AuthContextValue {
   user: LoginResponse["user"] | null;
   isAuthenticated: boolean;
+  authReady: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<LoginResponse["user"] | null>(() => {
+function readStoredUser(): LoginResponse["user"] | null {
+  try {
     const raw = localStorage.getItem("bp_user");
-    return raw ? JSON.parse(raw) : null;
-  });
+    return raw ? (JSON.parse(raw) as LoginResponse["user"]) : null;
+  } catch {
+    return null;
+  }
+}
+
+function hasOwnerToken(): boolean {
+  return Boolean(localStorage.getItem("bp_access"));
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<LoginResponse["user"] | null>(() =>
+    hasOwnerToken() ? readStoredUser() : null
+  );
+  const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("bp_access")) {
+    if (!hasOwnerToken()) {
       setUser(null);
+    } else {
+      setUser(readStoredUser());
     }
+    setAuthReady(true);
   }, []);
 
   const login = useCallback(async (username: string, password: string) => {
@@ -44,9 +61,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
+  const isAuthenticated = hasOwnerToken() && !!user;
+
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated: !!user, login, logout }}
+      value={{ user, isAuthenticated, authReady, login, logout }}
     >
       {children}
     </AuthContext.Provider>

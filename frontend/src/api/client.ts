@@ -264,6 +264,10 @@ export const ownerApi = {
       { method: "DELETE" }
     ),
   getMessage: (id: number) => api<InboundMessage>(`/messages/${id}/`),
+  getVisitorThread: (email: string) =>
+    api<{ items: ThreadItem[] }>(
+      `/messages/thread/?email=${encodeURIComponent(email)}`
+    ),
   sendReply: (messageId: number, body: string) =>
     api<OwnerReply>(`/messages/${messageId}/reply/`, {
       method: "POST",

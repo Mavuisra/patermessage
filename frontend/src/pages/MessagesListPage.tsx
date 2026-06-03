@@ -38,7 +38,7 @@ function latestPerVisitor(messages: InboundMessage[]): InboundMessage[] {
 }
 
 export function MessagesListPage() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, authReady } = useAuth();
   const [ownerMessages, setOwnerMessages] = useState<InboundMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
@@ -60,7 +60,7 @@ export function MessagesListPage() {
   );
 
   const load = useCallback(async () => {
-    if (!isAuthenticated) return;
+    if (!authReady || !isAuthenticated) return;
     setLoading(true);
     try {
       const m = await ownerApi.getMessages(filters);
@@ -70,11 +70,19 @@ export function MessagesListPage() {
     } finally {
       setLoading(false);
     }
-  }, [isAuthenticated, filters]);
+  }, [authReady, isAuthenticated, filters]);
 
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    const onFocus = () => {
+      if (isAuthenticated) void load();
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [isAuthenticated, load]);
 
   const visitors = useMemo(
     () => latestPerVisitor(ownerMessages),
@@ -187,7 +195,10 @@ export function MessagesListPage() {
       {isAuthenticated && !loading && visitors.length > 0 ? (
         visitors.map((msg) => (
           <div key={msg.sender_email} className="wa-convo-item-wrap">
-            <Link to={`/owner/chat/${msg.id}`} className="wa-convo-item">
+            <Link
+              to={`/owner/chat/${encodeURIComponent(msg.sender_email)}`}
+              className="wa-convo-item"
+            >
               <img src={logo} alt="" className="wa-avatar" />
               <div className="wa-convo-item__body">
                 <div className="wa-convo-item__row">

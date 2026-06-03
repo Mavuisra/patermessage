@@ -1,57 +1,100 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  ownerApi,
-  type InboundMessage,
-  type OwnerReply,
-} from "../api/client";
+import { ownerApi, type InboundMessage } from "../api/client";
 import logo from "../assets/logo.png";
 import { Icon } from "../components/icons/Icon";
 import { VoiceMessageBubble } from "../components/wa/VoiceMessageBubble";
 import { StatusBar } from "../components/wa/StatusBar";
 import { useAuth } from "../context/AuthContext";
-
-function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString("fr-FR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
+import {
+  fetchOwnerThread,
+  fetchVisitorSummary,
+  latestInboundMessageId,
+  type OwnerChatMsg,
+} from "../lib/ownerThread";
 
 export function OwnerChatPage() {
-  const { id } = useParams();
+  const { visitorEmail: rawEmail } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-  const [msg, setMsg] = useState<InboundMessage | null>(null);
+  const { isAuthenticated, authReady } = useAuth();
+  const [visitor, setVisitor] = useState<InboundMessage | null>(null);
+  const [messages, setMessages] = useState<OwnerChatMsg[]>([]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
+  const [loading, setLoading] = useState(true);
   const bodyRef = useRef<HTMLDivElement>(null);
 
-  const load = useCallback(() => {
-    if (id) ownerApi.getMessage(Number(id)).then(setMsg).catch(console.error);
-  }, [id]);
+  const visitorEmail = useMemo(() => {
+    if (!rawEmail) return "";
+    try {
+      return decodeURIComponent(rawEmail).trim();
+    } catch {
+      return rawEmail.trim();
+    }
+  }, [rawEmail]);
+
+  const load = useCallback(async () => {
+    if (!visitorEmail) return;
+    setLoading(true);
+    try {
+      if (/^\d+$/.test(visitorEmail)) {
+        const m = await ownerApi.getMessage(Number(visitorEmail));
+        navigate(`/owner/chat/${encodeURIComponent(m.sender_email)}`, {
+          replace: true,
+        });
+        return;
+      }
+      const [thread, summary] = await Promise.all([
+        fetchOwnerThread(visitorEmail),
+        fetchVisitorSummary(visitorEmail),
+      ]);
+      setMessages(thread);
+      setVisitor(summary);
+    } catch (e) {
+      console.error(e);
+      setMessages([]);
+      setVisitor(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [visitorEmail, navigate]);
 
   useEffect(() => {
+    if (!authReady) return;
     if (!isAuthenticated) {
       navigate("/adminpater", { replace: true });
       return;
     }
-    load();
-  }, [isAuthenticated, load, navigate]);
+    void load();
+  }, [authReady, isAuthenticated, load, navigate]);
 
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight, behavior: "smooth" });
-  }, [msg, text]);
+  }, [messages, text]);
 
   const sendReply = async () => {
     const trimmed = text.trim();
-    if (!trimmed || !msg) return;
+    if (!trimmed) return;
+    const messageId = latestInboundMessageId(messages);
+    if (!messageId) {
+      alert("Aucun message visiteur auquel répondre.");
+      return;
+    }
     setSending(true);
     try {
-      const reply = await ownerApi.sendReply(msg.id, trimmed);
-      setMsg((m) =>
-        m ? { ...m, replies: [...(m.replies || []), reply] } : m
-      );
+      const reply = await ownerApi.sendReply(messageId, trimmed);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `owner-${reply.id}`,
+          out: true,
+          time: new Date(reply.created_at).toLocaleTimeString("fr-FR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          text: reply.body,
+        },
+      ]);
       setText("");
     } catch (e) {
       alert(e instanceof Error ? e.message : "Envoi impossible");
@@ -60,9 +103,9 @@ export function OwnerChatPage() {
     }
   };
 
-  if (!isAuthenticated) return null;
+  if (!authReady || !isAuthenticated) return null;
 
-  if (!msg) {
+  if (loading) {
     return (
       <div className="wa-app wa-chat">
         <StatusBar />
@@ -70,6 +113,8 @@ export function OwnerChatPage() {
       </div>
     );
   }
+
+  const displayName = visitor?.sender_name || visitorEmail || "Visiteur";
 
   return (
     <div className="wa-app wa-chat wa-chat--owner">
@@ -80,12 +125,12 @@ export function OwnerChatPage() {
         </Link>
         <img src={logo} alt="" className="wa-chat-header__avatar" />
         <div className="wa-chat-header__info">
-          <div className="wa-chat-header__name">{msg.sender_name}</div>
+          <div className="wa-chat-header__name">{displayName}</div>
           <div className="wa-chat-header__status">
-            {msg.sender_occupation && <span>{msg.sender_occupation}</span>}
-            {msg.sender_occupation && " · "}
-            {msg.sender_email}
-            {msg.sender_phone && ` · ${msg.sender_phone}`}
+            {visitor?.sender_occupation && <span>{visitor.sender_occupation}</span>}
+            {visitor?.sender_occupation && " · "}
+            {visitorEmail}
+            {visitor?.sender_phone && ` · ${visitor.sender_phone}`}
           </div>
         </div>
         <button
@@ -93,15 +138,9 @@ export function OwnerChatPage() {
           className="wa-chat-header__menu"
           aria-label="Supprimer ce visiteur"
           onClick={async () => {
-            if (
-              !confirm(
-                `Supprimer ${msg.sender_name} et toutes ses données ?`
-              )
-            ) {
-              return;
-            }
+            if (!confirm(`Supprimer ${displayName} et toutes ses données ?`)) return;
             try {
-              await ownerApi.deleteVisitor(msg.sender_email);
+              await ownerApi.deleteVisitor(visitorEmail);
               navigate("/messages");
             } catch (e) {
               alert(e instanceof Error ? e.message : "Erreur");
@@ -112,45 +151,46 @@ export function OwnerChatPage() {
         </button>
       </header>
 
-      {msg.analysis && (
+      {visitor?.analysis && (
         <div className="wa-owner-analysis">
           <span>
-            Pertinence : <strong>{Math.round(msg.analysis.relevance_score)}%</strong>
+            Pertinence :{" "}
+            <strong>{Math.round(visitor.analysis.relevance_score)}%</strong>
           </span>
-          {msg.analysis.summary && <span> — {msg.analysis.summary}</span>}
+          {visitor.analysis.summary && <span> — {visitor.analysis.summary}</span>}
         </div>
       )}
 
       <div className="wa-chat-body" ref={bodyRef}>
-        {msg.voice_note_url && (
-          <div className="wa-bubble-row wa-bubble-row--in">
-            <VoiceMessageBubble
-              src={msg.voice_note_url}
-              outgoing={false}
-              avatarUrl={logo}
-            />
-          </div>
+        {messages.length === 0 && (
+          <p className="wa-pay-muted" style={{ padding: "1rem", textAlign: "center" }}>
+            Aucun message pour ce visiteur.
+          </p>
         )}
-        {msg.body && msg.body !== "Message vocal" && (
-          <div className="wa-bubble-row wa-bubble-row--in">
-            <div className="wa-bubble">
-              {msg.body}
-              <div className="wa-bubble__meta">
-                <span>{formatTime(msg.created_at)}</span>
+        {messages.map((m) => (
+          <div
+            key={m.id}
+            className={`wa-bubble-row wa-bubble-row--${m.out ? "out" : "in"}`}
+          >
+            {m.voiceUrl ? (
+              <VoiceMessageBubble
+                src={m.voiceUrl}
+                time={m.time}
+                outgoing={m.out}
+                priority={m.priority}
+                avatarUrl={m.out ? logo : logo}
+              />
+            ) : (
+              <div className="wa-bubble">
+                {m.text}
+                <div className="wa-bubble__meta">
+                  {m.out && (
+                    <Icon name="check-double" size={14} className="wa-icon--white" />
+                  )}
+                  <span>{m.time}</span>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
-
-        {(msg.replies || []).map((r: OwnerReply) => (
-          <div key={r.id} className="wa-bubble-row wa-bubble-row--out">
-            <div className="wa-bubble">
-              {r.body}
-              <div className="wa-bubble__meta">
-                <Icon name="check-double" size={14} className="wa-icon--white" />
-                <span>{formatTime(r.created_at)}</span>
-              </div>
-            </div>
+            )}
           </div>
         ))}
       </div>
@@ -160,7 +200,7 @@ export function OwnerChatPage() {
           <textarea
             className="wa-composer__input"
             rows={1}
-            placeholder={`Répondre à ${msg.sender_name}…`}
+            placeholder={`Répondre à ${displayName}…`}
             value={text}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={(e) => {

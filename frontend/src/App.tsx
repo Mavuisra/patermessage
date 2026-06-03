@@ -20,7 +20,7 @@ export default function App() {
         <Route path="/login" element={<Navigate to="/adminpater" replace />} />
         <Route path="/messages" element={<MessagesListPage />} />
         <Route path="/chat" element={<ChatPage />} />
-        <Route path="/owner/chat/:id" element={<OwnerChatPage />} />
+        <Route path="/owner/chat/:visitorEmail" element={<OwnerChatPage />} />
         <Route path="/payment/methods" element={<PaymentMethodsPage />} />
         <Route path="/payment/checkout" element={<PaymentCheckoutPage />} />
         <Route path="/payment/success" element={<PaymentSuccessPage />} />

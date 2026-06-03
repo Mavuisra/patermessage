@@ -32,9 +32,20 @@ class VisitorThreadView(APIView):
     def get(self, request):
         email = (request.query_params.get("email") or "").strip()
         user = request.user
-        if user.is_authenticated and getattr(user, "role", None) == "visitor":
+
+        if user.is_authenticated and getattr(user, "role", None) == "owner":
+            if not getattr(user, "is_black_pater", False):
+                from rest_framework.exceptions import PermissionDenied
+
+                raise PermissionDenied("Accès réservé à Black Pater.")
+            if not email:
+                return Response(
+                    {"detail": "Paramètre email requis."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        elif user.is_authenticated and getattr(user, "role", None) == "visitor":
             email = (user.email or "").strip()
-        if not email:
+        elif not email:
             return Response({"items": []})
 
         messages = (
