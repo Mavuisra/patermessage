@@ -37,7 +37,7 @@ export function LoginPage({ adminMode = false }: { adminMode?: boolean }) {
       <StatusBar />
       <img src={logo} alt="" className="wa-login__logo" />
       <h1 className="wa-login__h1">
-        {adminMode ? "Administration Black Panther" : "Connexion"}
+        {adminMode ? "Administration Black Pater" : "Connexion"}
       </h1>
       <p className="wa-login__sub">
         Accès réservé au propriétaire — messages, vocaux et statistiques.
@@ -50,7 +50,7 @@ export function LoginPage({ adminMode = false }: { adminMode?: boolean }) {
           </span>
           <input
             type="text"
-            placeholder="Nom d'utilisateur (ex. blackpanther)"
+            placeholder="Nom d'utilisateur (ex. BlackPater)"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoComplete="username"

@@ -1,6 +1,6 @@
-# Black Panther — Plateforme premium
+# Black Pater — Plateforme premium
 
-Plateforme web PWA pour monétiser le temps de Black Panther : messages filtrés par IA, messages premium payants, réservations d'appels, tableau de bord privé et notifications push (FCM).
+Plateforme web PWA pour monétiser le temps de Black Pater : messages filtrés par IA, messages premium payants, réservations d'appels, tableau de bord privé et notifications push (FCM).
 
 ## Stack
 
@@ -50,7 +50,7 @@ npm run dev
 ```
 
 - **Page publique** : http://localhost:5173  
-- **Espace propriétaire** : http://localhost:5173/adminpater → identifiants `blackpanther` / mot de passe défini  
+- **Espace propriétaire** : http://localhost:5173/adminpater → identifiants `BlackPater` / mot de passe défini  
 - **API docs** : http://localhost:8000/api/docs/
 
 ## Variables d'environnement
@@ -112,4 +112,4 @@ patermessage/
 
 ## Licence
 
-Projet privé — usage exclusif Black Panther.
+Projet privé — usage exclusif Black Pater.

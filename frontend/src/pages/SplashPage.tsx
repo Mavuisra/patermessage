@@ -17,7 +17,7 @@ export function SplashPage() {
       <StatusBar />
       <motion.img
         src={logo}
-        alt="Black Panther"
+        alt="Black Pater"
         className="wa-splash__logo"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -29,7 +29,7 @@ export function SplashPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.5 }}
       >
-        BLACK PANTHER
+        Black Pater
       </motion.p>
       <div className="wa-splash__dots" aria-hidden>
         <span className="wa-splash__dot" />

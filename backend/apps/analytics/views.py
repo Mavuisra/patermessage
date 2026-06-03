@@ -15,7 +15,7 @@ class DashboardStatsView(APIView):
         return [permissions.IsAuthenticated()]
 
     def get(self, request):
-        if not request.user.is_black_panther:
+        if not request.user.is_black_pater:
             from rest_framework.exceptions import PermissionDenied
 
             raise PermissionDenied()

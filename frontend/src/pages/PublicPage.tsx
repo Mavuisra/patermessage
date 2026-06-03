@@ -50,7 +50,7 @@ export function PublicPage() {
     return () => clearTimeout(t);
   }, [toast]);
 
-  const displayName = profile?.display_name ?? "Black Panther";
+  const displayName = profile?.display_name ?? "Black Pater";
 
   const modeTabs = (
     <div className="chat-mode-tabs">

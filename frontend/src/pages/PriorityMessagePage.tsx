@@ -6,7 +6,7 @@ import { Stepper } from "../components/mockup/Stepper";
 
 const MAX_CHARS = 1000;
 const PLACEHOLDER =
-  "Bonjour Black Panther, Je souhaiterais vous proposer une opportunité de partenariat qui pourrait vous intéresser...";
+  "Bonjour Black Pater, Je souhaiterais vous proposer une opportunité de partenariat qui pourrait vous intéresser...";
 
 type Step = "write" | "payment" | "confirm";
 

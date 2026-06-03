@@ -128,7 +128,7 @@ export function CallBookingPage() {
 
         <div className="bp-info-banner">
           <span className="bp-info-banner__icon">📞</span>
-          <span>Échange privé avec Black Panther.</span>
+          <span>Échange privé avec Black Pater.</span>
         </div>
 
         <div className="bp-recap">

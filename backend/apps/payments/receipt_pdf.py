@@ -93,7 +93,7 @@ def generate_receipt_pdf(payment: PaymentRecord) -> bytes:
         "Votre abonnement est actif. Messages prioritaires "
         "et vocaux débloqués."
         if payment.kind == PaymentRecord.Kind.SUBSCRIPTION
-        else "Votre message a été envoyé en priorité et notifié à Black Panther."
+        else "Votre message a été envoyé en priorité et notifié à Black Pater."
     )
     for i, line in enumerate(_wrap_text(subtitle, 52)):
         c.drawCentredString(cx, y - i * 12, line)
@@ -115,10 +115,10 @@ def generate_receipt_pdf(payment: PaymentRecord) -> bytes:
     c.drawString(box_x + 6 * mm, ty, "RÉCAPITULATIF")
 
     ty -= 10 * mm
-    # Ligne Black Panther + montant
+    # Ligne Black Pater + montant
     c.setFillColor(GRAY_DARK)
     c.setFont("Helvetica-Bold", 11)
-    c.drawString(box_x + 6 * mm, ty, "Black Panther")
+    c.drawString(box_x + 6 * mm, ty, "Black Pater")
     c.setFillColor(BLUE)
     c.setFont("Helvetica-Bold", 8)
     c.drawString(box_x + 48 * mm, ty + 1, "✓")

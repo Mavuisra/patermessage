@@ -180,7 +180,7 @@ export function OwnerChatPage() {
             <Icon name="send" size={20} className="wa-icon--white" />
           </button>
         </div>
-        <p className="wa-owner-composer-hint">Vous répondez en tant que Black Panther</p>
+        <p className="wa-owner-composer-hint">Vous répondez en tant que Black Pater</p>
       </div>
     </div>
   );

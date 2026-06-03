@@ -107,10 +107,10 @@ class MessageViewSet(viewsets.ReadOnlyModelViewSet):
         return [permissions.IsAuthenticated()]
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and not request.user.is_black_panther:
+        if request.user.is_authenticated and not request.user.is_black_pater:
             from rest_framework.exceptions import PermissionDenied
 
-            raise PermissionDenied("Accès réservé à Black Panther.")
+            raise PermissionDenied("Accès réservé à Black Pater.")
         return super().dispatch(request, *args, **kwargs)
 
     @action(detail=True, methods=["post"])

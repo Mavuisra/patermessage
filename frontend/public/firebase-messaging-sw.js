@@ -15,7 +15,7 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  const title = payload.notification?.title || "Black Panther";
+  const title = payload.notification?.title || "Black Pater";
   const options = {
     body: payload.notification?.body || "",
     icon: "/pwa-192x192.png",

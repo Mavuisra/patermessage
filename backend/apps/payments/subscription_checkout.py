@@ -43,7 +43,7 @@ def create_subscription_checkout(user: User, request) -> dict[str, Any]:
     if not settings.STRIPE_SECRET_KEY:
         mock = _mock_checkout(
             amount,
-            "Abonnement Black Panther",
+            "Abonnement Black Pater",
             {"kind": "subscription", "ref_id": user.id, "payment_id": payment.id},
         )
         return {**mock, "payment_id": payment.id}
@@ -57,7 +57,7 @@ def create_subscription_checkout(user: User, request) -> dict[str, Any]:
                     "currency": currency,
                     "unit_amount": amount,
                     "product_data": {
-                        "name": "Black Panther — Abonnement mensuel",
+                        "name": "Black Pater — Abonnement mensuel",
                         "description": "Messages prioritaires et vocaux — 1 mois",
                     },
                 },

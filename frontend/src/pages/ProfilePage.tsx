@@ -36,7 +36,7 @@ export function ProfilePage() {
         {isAuthenticated && (
           <div className="wa-card wa-card--center wa-profile-owner">
             <img src={logo} alt="" className="wa-profile-logo" />
-            <strong>{user?.display_name || "Black Panther"}</strong>
+            <strong>{user?.display_name || "Black Pater"}</strong>
             <p className="wa-profile-role">Compte propriétaire</p>
             <Link
               to="/messages"

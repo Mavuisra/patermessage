@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             name='PlatformSettings',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('display_name', models.CharField(default='Black Panther', max_length=120)),
+                ('display_name', models.CharField(default='Black Pater', max_length=120)),
                 ('tagline', models.CharField(default='Monétisez chaque minute.', max_length=255)),
                 ('bio', models.TextField(blank=True)),
                 ('avatar_url', models.URLField(blank=True)),

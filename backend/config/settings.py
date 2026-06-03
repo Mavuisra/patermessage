@@ -103,9 +103,9 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB", "blackpanther"),
-            "USER": os.getenv("POSTGRES_USER", "blackpanther"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "blackpanther_secret"),
+            "NAME": os.getenv("POSTGRES_DB", "BlackPater"),
+            "USER": os.getenv("POSTGRES_USER", "BlackPater"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "BlackPater_secret"),
             "HOST": os.getenv("POSTGRES_HOST", "localhost"),
             "PORT": os.getenv("POSTGRES_PORT", "5432"),
         }
@@ -219,14 +219,14 @@ CALL_BOOKING_PRICE_CENTS = int(os.getenv("CALL_BOOKING_PRICE_CENTS", "15000"))
 FIREBASE_CREDENTIALS_PATH = os.getenv("FIREBASE_CREDENTIALS_PATH", "")
 FCM_VAPID_KEY = os.getenv("FCM_VAPID_KEY", "")
 
-BLACK_PANTHER_DISPLAY_NAME = os.getenv("BLACK_PANTHER_DISPLAY_NAME", "Black Panther")
-BLACK_PANTHER_TAGLINE = os.getenv(
-    "BLACK_PANTHER_TAGLINE",
+BLACK_PATER_DISPLAY_NAME = os.getenv("BLACK_PATER_DISPLAY_NAME", "Black Pater")
+BLACK_PATER_TAGLINE = os.getenv(
+    "BLACK_PATER_TAGLINE",
     "Monétisez chaque minute. Filtrez l'essentiel.",
 )
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Black Panther Platform API",
+    "TITLE": "Black Pater Platform API",
     "DESCRIPTION": "API pour messages IA, réservations et paiements",
     "VERSION": "1.0.0",
 }

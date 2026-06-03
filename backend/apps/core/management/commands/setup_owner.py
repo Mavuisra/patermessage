@@ -7,12 +7,12 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = "Crée le compte Black Panther et les paramètres plateforme"
+    help = "Crée le compte Black Pater et les paramètres plateforme"
 
     def add_arguments(self, parser):
-        parser.add_argument("--username", default="blackpanther")
+        parser.add_argument("--username", default="BlackPater")
         parser.add_argument("--password", default="changeme")
-        parser.add_argument("--email", default="owner@blackpanther.app")
+        parser.add_argument("--email", default="owner@BlackPater.app")
 
     def handle(self, *args, **options):
         import os
@@ -26,7 +26,7 @@ class Command(BaseCommand):
             defaults={
                 "email": email,
                 "role": User.Role.OWNER,
-                "display_name": "Black Panther",
+                "display_name": "Black Pater",
                 "is_staff": True,
                 "is_superuser": True,
             },

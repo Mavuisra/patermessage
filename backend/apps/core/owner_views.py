@@ -10,7 +10,7 @@ User = get_user_model()
 
 
 def _require_owner(request):
-    if not request.user.is_authenticated or not request.user.is_black_panther:
+    if not request.user.is_authenticated or not request.user.is_black_pater:
         return False
     return True
 

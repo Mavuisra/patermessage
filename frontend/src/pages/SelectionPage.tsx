@@ -26,7 +26,7 @@ export function SelectionPage() {
       <header className="bp-select__header">
         <div className="bp-bp-logo">BP</div>
         <h1 className="bp-select__title">
-          Comment souhaitez-vous contacter <strong>Black Panther</strong> ?
+          Comment souhaitez-vous contacter <strong>Black Pater</strong> ?
         </h1>
       </header>
 
@@ -64,7 +64,7 @@ export function SelectionPage() {
           <div className="bp-option__body">
             <div className="bp-option__name">Réserver un appel</div>
             <p className="bp-option__desc">
-              Réservez un échange privé avec Black Panther.
+              Réservez un échange privé avec Black Pater.
             </p>
           </div>
           <span className="bp-option__chevron" aria-hidden>
@@ -79,7 +79,7 @@ export function SelectionPage() {
       </footer>
 
       <Link to="/login" className="bp-select__admin">
-        Espace privé Black Panther
+        Espace privé Black Pater
       </Link>
     </div>
   );

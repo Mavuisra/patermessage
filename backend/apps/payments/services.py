@@ -59,7 +59,7 @@ def create_checkout_for_message(message: InboundMessage, request) -> dict[str, A
                 "price_data": {
                     "currency": settings.SUBSCRIPTION_CURRENCY,
                     "unit_amount": message.amount_cents,
-                    "product_data": {"name": "Message premium — Black Panther"},
+                    "product_data": {"name": "Message premium — Black Pater"},
                 },
                 "quantity": 1,
             }
@@ -103,7 +103,7 @@ def create_checkout_for_booking(booking: CallBooking, request) -> dict[str, Any]
                 "price_data": {
                     "currency": settings.SUBSCRIPTION_CURRENCY,
                     "unit_amount": booking.amount_cents,
-                    "product_data": {"name": "Appel privé — Black Panther"},
+                    "product_data": {"name": "Appel privé — Black Pater"},
                 },
                 "quantity": 1,
             }

@@ -34,7 +34,7 @@ export function InstallPrompt() {
   return (
     <div className="toast toast--chat" style={{ display: "flex", gap: "0.75rem", alignItems: "center", maxWidth: "90%" }}>
       <Icon name="install" size={20} className="wa-icon--white" />
-      <span>Installer Black Panther</span>
+      <span>Installer Black Pater</span>
       <button
         type="button"
         className="wa-btn-primary"

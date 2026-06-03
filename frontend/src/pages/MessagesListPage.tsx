@@ -238,7 +238,7 @@ export function MessagesListPage() {
           <img src={logo} alt="" className="wa-avatar" />
           <div className="wa-convo-item__body">
             <div className="wa-convo-item__row">
-              <VerifiedName>Black Panther</VerifiedName>
+              <VerifiedName>Black Pater</VerifiedName>
               <span className="wa-convo-item__time">09:41</span>
             </div>
             <p className="wa-convo-item__preview">Commencez votre conversation…</p>

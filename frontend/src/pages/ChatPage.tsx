@@ -236,7 +236,7 @@ export function ChatPage() {
         <img src={logo} alt="" className="wa-chat-header__avatar" />
         <div className="wa-chat-header__info">
           <div className="wa-chat-header__name">
-            Black Panther
+            Black Pater
             <Icon name="verified" size={16} className="wa-verified" />
           </div>
           <div className="wa-chat-header__status">En ligne</div>

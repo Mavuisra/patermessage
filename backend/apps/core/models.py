@@ -23,7 +23,7 @@ class User(AbstractUser):
     )
 
     @property
-    def is_black_panther(self) -> bool:
+    def is_black_pater(self) -> bool:
         return self.role == self.Role.OWNER
 
     def __str__(self) -> str:
@@ -32,7 +32,7 @@ class User(AbstractUser):
 
 class PlatformSettings(models.Model):
     """Configuration publique de la page unique."""
-    display_name = models.CharField(max_length=120, default="Black Panther")
+    display_name = models.CharField(max_length=120, default="Black Pater")
     tagline = models.CharField(max_length=255, default="Monétisez chaque minute.")
     bio = models.TextField(blank=True)
     avatar_url = models.URLField(blank=True)

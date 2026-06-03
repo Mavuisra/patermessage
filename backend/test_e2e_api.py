@@ -34,12 +34,12 @@ print("\n=== API Django (direct) ===\n")
 
 code, profile = req(f"{BASE}/public/")
 ok("GET /public/", code == 200, f"code={code}")
-ok("Profil display_name", profile.get("display_name") == "Black Panther")
+ok("Profil display_name", profile.get("display_name") == "Black Pater")
 
 code, login = req(
     f"{BASE}/auth/login/",
     "POST",
-    {"username": "blackpanther", "password": "changeme"},
+    {"username": "BlackPater", "password": "changeme"},
 )
 ok("Login owner", code == 200 and "access" in login)
 token = login.get("access", "")
@@ -147,11 +147,11 @@ if token:
         code, reply = req(
             f"{BASE}/messages/{msg_id}/reply/",
             "POST",
-            {"body": "Réponse test E2E Black Panther"},
+            {"body": "Réponse test E2E Black Pater"},
             headers={"Authorization": f"Bearer {token}"},
         )
         ok("Réponse owner POST /reply/", code == 201, f"code={code}")
-        ok("Corps réponse", reply.get("body") == "Réponse test E2E Black Panther")
+        ok("Corps réponse", reply.get("body") == "Réponse test E2E Black Pater")
     code, stats = req(f"{BASE}/analytics/dashboard/", headers={"Authorization": f"Bearer {token}"})
     ok("Stats dashboard", code == 200)
 

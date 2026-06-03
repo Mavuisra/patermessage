@@ -10,7 +10,7 @@ export function OwnerLoginBanner() {
       <div className="wa-owner-banner wa-owner-banner--on">
         <Icon name="shield" size={20} className="wa-icon--primary" />
         <span>
-          Connecté en tant que <strong>{user?.display_name || "Black Panther"}</strong>
+          Connecté en tant que <strong>{user?.display_name || "Black Pater"}</strong>
         </span>
       </div>
     );
@@ -20,7 +20,7 @@ export function OwnerLoginBanner() {
     <Link to="/login" className="wa-owner-banner">
       <Icon name="shield" size={20} className="wa-icon--primary" />
       <span>
-        <strong>Espace Black Panther</strong>
+        <strong>Espace Black Pater</strong>
         <br />
         <small>Connexion propriétaire pour lire les messages</small>
       </span>

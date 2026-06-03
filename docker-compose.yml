@@ -2,15 +2,15 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: blackpanther
-      POSTGRES_USER: blackpanther
-      POSTGRES_PASSWORD: blackpanther_secret
+      POSTGRES_DB: BlackPater
+      POSTGRES_USER: BlackPater
+      POSTGRES_PASSWORD: BlackPater_secret
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U blackpanther -d blackpanther"]
+      test: ["CMD-SHELL", "pg_isready -U BlackPater -d BlackPater"]
       interval: 5s
       timeout: 5s
       retries: 5

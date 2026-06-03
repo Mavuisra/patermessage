@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg", "apple-touch-icon.png"],
       manifest: {
-        name: "Black Panther",
-        short_name: "BlackPanther",
+        name: "Black Pater",
+        short_name: "BlackPater",
         description: "Plateforme premium — messages IA et réservations",
         theme_color: "#025dcc",
         background_color: "#0a0a0f",

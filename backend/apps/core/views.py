@@ -39,8 +39,8 @@ class PublicProfileView(APIView):
         settings_obj, _ = PlatformSettings.objects.get_or_create(
             pk=1,
             defaults={
-                "display_name": settings.BLACK_PANTHER_DISPLAY_NAME,
-                "tagline": settings.BLACK_PANTHER_TAGLINE,
+                "display_name": settings.BLACK_PATER_DISPLAY_NAME,
+                "tagline": settings.BLACK_PATER_TAGLINE,
                 "premium_message_price_cents": settings.PREMIUM_MESSAGE_PRICE_CENTS,
                 "call_price_cents": settings.CALL_BOOKING_PRICE_CENTS,
             },

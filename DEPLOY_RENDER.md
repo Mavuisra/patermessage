@@ -1,4 +1,4 @@
-# Déployer Black Panther sur Render (gratuit)
+# Déployer Black Pater sur Render (gratuit)
 
 ## Un seul repo GitHub, deux projets
 
@@ -15,13 +15,13 @@ Render ne devine pas tout seul : c’est **`rootDir`** + **`runtime`** qui chois
 
 | Service Render | Type dans le dashboard | Dossier (`Root Directory`) | Build |
 |----------------|------------------------|------------------------------|--------|
-| **blackpanther-api** | **Web Service** | `backend` | `./build.sh` |
-| **blackpanther-web** | **Static Site** | `frontend` | `npm install && npm run build` |
-| **blackpanther-db** | **PostgreSQL** | — | — |
+| **BlackPater-api** | **Web Service** | `backend` | `./build.sh` |
+| **BlackPater-web** | **Static Site** | `frontend` | `npm install && npm run build` |
+| **BlackPater-db** | **PostgreSQL** | — | — |
 
 Vous aurez **2 URLs différentes** :
-- Site (React) : `https://blackpanther-web.onrender.com`
-- API (Django) : `https://blackpanther-api.onrender.com`
+- Site (React) : `https://BlackPater-web.onrender.com`
+- API (Django) : `https://BlackPater-api.onrender.com`
 
 ---
 
@@ -74,9 +74,9 @@ Si vous créez **un par un** sans Blueprint :
 
 | Service | Type | Rôle |
 |---------|------|------|
-| `blackpanther-db` | PostgreSQL gratuit | Base de données |
-| `blackpanther-api` | Web Service gratuit | API Django |
-| `blackpanther-web` | Static Site gratuit | React (Vite) |
+| `BlackPater-db` | PostgreSQL gratuit | Base de données |
+| `BlackPater-api` | Web Service gratuit | API Django |
+| `BlackPater-web` | Static Site gratuit | React (Vite) |
 
 ## Méthode rapide (Blueprint) — détail
 
@@ -86,7 +86,7 @@ Si vous créez **un par un** sans Blueprint :
 4. Render détecte `render.yaml` et crée les 3 ressources.
 5. Variables à renseigner à la main :
 
-### `blackpanther-api`
+### `BlackPater-api`
 
 | Variable | Exemple |
 |----------|---------|
@@ -94,19 +94,19 @@ Si vous créez **un par un** sans Blueprint :
 | `CORS_ALLOWED_ORIGINS` | `https://VOTRE-SITE-FRONT.onrender.com` |
 | `ALLOWED_HOSTS` | `patermessager.onrender.com` |
 
-### `blackpanther-web`
+### `BlackPater-web`
 
 | Variable | Exemple |
 |----------|---------|
 | `VITE_API_URL` | `https://patermessager.onrender.com/api` |
 
 6. Attendez le premier déploiement (5–10 min).
-7. Ouvrez l’URL du site statique (`blackpanther-web`).
+7. Ouvrez l’URL du site statique (`BlackPater-web`).
 
 ## Connexion propriétaire
 
 - URL : `https://VOTRE-SITE.onrender.com/adminpater`
-- Utilisateur : `blackpanther`
+- Utilisateur : `BlackPater`
 - Mot de passe : celui défini dans `DJANGO_SUPERUSER_PASSWORD`
 
 ## Limites du plan gratuit Render
